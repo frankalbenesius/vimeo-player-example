@@ -66,7 +66,7 @@ function createCueListItem(id, seconds, text) {
 function clearCueList() {
   // clears cueListItems
   var currentItems = document.getElementsByClassName('cueListItem');
-  while(currentItems[0]) { // remove current list items
+  while(currentItems[0]) { // remove current list items (items are removed in live list)
     currentItems[0].parentNode.removeChild(currentItems[0]);
   }
 }
