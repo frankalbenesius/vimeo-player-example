@@ -6,17 +6,14 @@ var options = {
 };
 var player = new Vimeo.Player('player', options);
 
-player.on('cuepoint', function(cuepoint) {
-  console.log('cuepoint', cuepoint);
-});
-
-document.querySelector('.cueForm').addEventListener('submit', function(e) {
+/* CUE CREATION */
+document.querySelector('#cueForm').addEventListener('submit', function(e) {
   e.preventDefault();
 
   player.getCurrentTime().then(function(seconds) {
     var time = seconds;
-    var text = document.querySelector('.cueInput').value;
-    document.querySelector('.cueInput').value = ''; // clear input value
+    var text = document.querySelector('#cueInput').value;
+    document.querySelector('#cueInput').value = ''; // clear input value
 
     player.addCuePoint(time, {
       text: text }
@@ -38,4 +35,15 @@ document.querySelector('.cueForm').addEventListener('submit', function(e) {
   }).catch(function(error) {
     console.warn('getCurrentTime() error', error);
   });
+});
+
+/* CUE RENDERING */
+var cueDuration = 4 * 1000;
+var cueTimeout;
+player.on('cuepoint', function(cuePoint) {
+  clearTimeout(cueTimeout); // clear existing hide timeout
+  var cue = document.querySelector('#cue'); // get cue
+  cue.innerHTML = cuePoint.data.text; // set cue text
+  cue.style.display = 'block'; // set cue to visible
+  cueTimeout = setTimeout(function() { cue.style.display = 'none' }, cueDuration); // hide cue after delay
 });
