@@ -6,18 +6,26 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://player.vimeo.com/api/player.js"></script>
   <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 </head>
 
 <body>
-  <div class="wrapper">
-    <h1>Vimeo Cues</h1>
-    <div id="player"></div>
+<div class="wrapper">
 
-    <script src="https://player.vimeo.com/api/player.js"></script>
-    <script src="index.js"></script>
-  </div>
+  <h1>Vimeo Cues</h1>
+
+  <div id="player"></div>
+
+  <form class="cueForm">
+    <input class="cueInput" type="text" />
+    <input class="button" type="submit" value="Add Cue">
+  </form>
+
+  <script src="script.js"></script>
+
+</div>
 </body>
 </html>
