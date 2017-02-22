@@ -31,4 +31,23 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+#cueList {
+  text-align: left;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.cueListItem {
+  display: block;
+  margin: 10px 0;
+}
+
+.cueListItemTime {
+  /*padding-right: 10px;*/
+}
+.cueListItemTime:after {
+  content: ' - ';
+}
+
 /* blue: #00adef */

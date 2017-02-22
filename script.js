@@ -6,21 +6,33 @@ var options = {
 };
 var player = new Vimeo.Player('player', options);
 
-/* CUE LIST */
+/* CUE LIST RENDERING */
+function padLeft(string, pad, length) {
+  return (new Array(length+1).join(pad)+string).slice(-length);
+}
+function toMinutes(seconds) {
+  var minutes = Math.floor(seconds / 60);
+  var secondsLeft = Math.round(seconds) % 60;
+  return padLeft(minutes, '0', 2)+':'+padLeft(secondsLeft, '0', 2);
+}
 function createElement(element, className, content) {
+  // creates an element
   content = content || ''; // default empty content
   var element = document.createElement(element);
   element.className = className;
   element.innerHTML = content;
   return element;
 }
-function createCueListItem(time, text) {
+function createCueListItem(id, seconds, text) {
+  // creates a cue list item
   var cueListItem = createElement('div', 'cueListItem');
-  cueListItem.appendChild(createElement('span', 'cueListItemTime', time.toString()));
+  cueListItem.dataset.id = id; // attach id to element, necessary for removing cues
+  cueListItem.appendChild(createElement('span', 'cueListItemTime', toMinutes(seconds)));
   cueListItem.appendChild(createElement('span', 'cueListItemText', text));
   return cueListItem;
 }
 function refreshCueList() {
+  // gets current video cues and displays them
   player.getCuePoints().then(function(cuePoints) {
     var currentItems = document.getElementsByClassName('cueListItem');
     while(currentItems[0]) { // remove current list items
@@ -28,7 +40,9 @@ function refreshCueList() {
     }
     for(var i=0; i < cuePoints.length; i++) {
       var cuePoint = cuePoints[i];
-      document.getElementById('cueList').appendChild(createCueListItem(cuePoint.time, cuePoint.data.text));
+      document.getElementById('cueList').appendChild(
+        createCueListItem(cuePoint.id, cuePoint.time, cuePoint.data.text)
+      );
     }
   }).catch(function(error) {
     console.warn('getCuePoints()', error);
