@@ -8,7 +8,7 @@ var player = new Vimeo.Player('player', options);
 
 /* CUE LIST RENDERING */
 function padLeft(string, pad, length) {
-  // lets be honest I didn't write this http://stackoverflow.com/a/3733257
+  // lets be honest, I didn't write this http://stackoverflow.com/a/3733257
   return (new Array(length+1).join(pad)+string).slice(-length);
 }
 
@@ -56,7 +56,7 @@ function createCueListItem(id, seconds, text) {
   deleteButton.addEventListener('click', function(event) {
     event.preventDefault();
     removeCuePoint(id);
-  })
+  });
   cueListItem.appendChild(deleteButton);
   return cueListItem;
 }
