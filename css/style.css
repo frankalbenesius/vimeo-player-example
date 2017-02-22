@@ -44,10 +44,10 @@ body {
 }
 
 .cueListItemTime {
-  /*padding-right: 10px;*/
 }
-.cueListItemTime:after {
-  content: ' - ';
+.cueListItemDelete {
+}
+.cueListItemText {
 }
 
 /* blue: #00adef */

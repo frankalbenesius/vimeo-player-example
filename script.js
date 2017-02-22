@@ -10,11 +10,13 @@ var player = new Vimeo.Player('player', options);
 function padLeft(string, pad, length) {
   return (new Array(length+1).join(pad)+string).slice(-length);
 }
+
 function toMinutes(seconds) {
   var minutes = Math.floor(seconds / 60);
   var secondsLeft = Math.round(seconds) % 60;
   return padLeft(minutes, '0', 2)+':'+padLeft(secondsLeft, '0', 2);
 }
+
 function createElement(element, className, content) {
   // creates an element
   content = content || ''; // default empty content
@@ -23,21 +25,50 @@ function createElement(element, className, content) {
   element.innerHTML = content;
   return element;
 }
+
+function removeCuePoint(id) {
+  player.removeCuePoint(id).then(function() {
+    refreshCueList();
+  }).catch(function(error) {
+    switch (error.name) {
+      case 'UnsupportedError':
+        console.warn('cue points are not supported with the current player or browser', error);
+        break;
+      case 'RangeError':
+        console.warn('a cue point with the id passed wasn’t found', error);
+        break;
+      default:
+        console.warn('some other error occurred', error);
+        break;
+    }
+  });
+}
+
 function createCueListItem(id, seconds, text) {
   // creates a cue list item
   var cueListItem = createElement('div', 'cueListItem');
-  cueListItem.dataset.id = id; // attach id to element, necessary for removing cues
-  cueListItem.appendChild(createElement('span', 'cueListItemTime', toMinutes(seconds)));
-  cueListItem.appendChild(createElement('span', 'cueListItemText', text));
+  cueListItem.appendChild(createElement('div', 'cueListItemTime', toMinutes(seconds)));
+  cueListItem.appendChild(createElement('div', 'cueListItemText', text));
+  var deleteButton = createElement('button', 'cueListItemDelete', 'Delete')
+  deleteButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    removeCuePoint(id);
+  })
+  cueListItem.appendChild(deleteButton);
   return cueListItem;
 }
+
+function clearCueList() {
+  var currentItems = document.getElementsByClassName('cueListItem');
+  while(currentItems[0]) { // remove current list items
+    currentItems[0].parentNode.removeChild(currentItems[0]);
+  }
+}
+
 function refreshCueList() {
   // gets current video cues and displays them
+  clearCueList();
   player.getCuePoints().then(function(cuePoints) {
-    var currentItems = document.getElementsByClassName('cueListItem');
-    while(currentItems[0]) { // remove current list items
-      currentItems[0].parentNode.removeChild(currentItems[0]);
-    }
     for(var i=0; i < cuePoints.length; i++) {
       var cuePoint = cuePoints[i];
       document.getElementById('cueList').appendChild(
@@ -48,7 +79,7 @@ function refreshCueList() {
     console.warn('getCuePoints()', error);
   });
 }
-refreshCueList();
+refreshCueList(); // do this immediately, just in case
 
 /* CUE CREATION */
 document.getElementById('cueForm').addEventListener('submit', function(e) {
