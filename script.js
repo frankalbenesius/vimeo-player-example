@@ -6,7 +6,9 @@ var options = {
 };
 var player = new Vimeo.Player('player', options);
 
+
 /* CUE LIST RENDERING */
+
 function padLeft(string, pad, length) {
   // lets be honest, I didn't write this http://stackoverflow.com/a/3733257
   return (new Array(length+1).join(pad)+string).slice(-length);
@@ -85,7 +87,9 @@ function refreshCueList() {
 }
 refreshCueList(); // do this immediately, just in case
 
+
 /* CUE CREATION */
+
 document.getElementById('cueForm').addEventListener('submit', function(e) {
   e.preventDefault();
   player.getCurrentTime().then(function(seconds) {
@@ -115,7 +119,9 @@ document.getElementById('cueForm').addEventListener('submit', function(e) {
   });
 });
 
+
 /* CUE RENDERING */
+
 var cueDuration = 4 * 1000;
 var cueTimeout;
 player.on('cuepoint', function(cuePoint) {
