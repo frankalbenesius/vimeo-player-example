@@ -8,10 +8,12 @@ var player = new Vimeo.Player('player', options);
 
 /* CUE LIST RENDERING */
 function padLeft(string, pad, length) {
+  // lets be honest I didn't write this http://stackoverflow.com/a/3733257
   return (new Array(length+1).join(pad)+string).slice(-length);
 }
 
 function toMinutes(seconds) {
+  // converts seconds to prettified minutes
   var minutes = Math.floor(seconds / 60);
   var secondsLeft = Math.round(seconds) % 60;
   return padLeft(minutes, '0', 2)+':'+padLeft(secondsLeft, '0', 2);
@@ -27,6 +29,7 @@ function createElement(element, className, content) {
 }
 
 function removeCuePoint(id) {
+  // remove a cue point from embedded player
   player.removeCuePoint(id).then(function() {
     refreshCueList();
   }).catch(function(error) {
@@ -59,6 +62,7 @@ function createCueListItem(id, seconds, text) {
 }
 
 function clearCueList() {
+  // clears cueListItems
   var currentItems = document.getElementsByClassName('cueListItem');
   while(currentItems[0]) { // remove current list items
     currentItems[0].parentNode.removeChild(currentItems[0]);
@@ -84,7 +88,6 @@ refreshCueList(); // do this immediately, just in case
 /* CUE CREATION */
 document.getElementById('cueForm').addEventListener('submit', function(e) {
   e.preventDefault();
-
   player.getCurrentTime().then(function(seconds) {
     var time = seconds;
     var text = document.getElementById('cueInput').value;
