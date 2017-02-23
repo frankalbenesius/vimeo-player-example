@@ -7,6 +7,7 @@ font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  text-align: center;
 }
 
 header {
@@ -31,6 +32,13 @@ header h1 {
 
 #player {
   position: relative;
+}
+
+#error {
+  display: none;
+  background-color: #ffaeae;
+  padding: 10px;
+  margin: 15px 20px 0;
 }
 
 #cueForm, #cueList {

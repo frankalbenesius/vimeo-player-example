@@ -5,7 +5,11 @@ var options = {
   width: '600px'
 };
 var player = new Vimeo.Player('player', options);
+var error = document.getElementById('error');
+var noCues = document.getElementById('noCues');
 
+var cueDuration = 4 * 1000;
+var cueTimeout; // for cancelling timeouts later
 
 /* CUE LIST RENDERING */
 
@@ -25,8 +29,11 @@ function setCurrentTime(seconds) {
   console.log('seconds', seconds);
   var leadIn = Math.max(seconds - 2, 0); // start a bit before actual cue time
   console.log('leadIn', leadIn);
-  player.setCurrentTime(leadIn).catch(function(error) {
+  player.setCurrentTime(leadIn).then(function() {
+    clearError();
+  }).catch(function(error) {
     console.warn('an error occurred setting the player time');
+    setError('while setting the player time');
   });
 }
 
@@ -34,7 +41,9 @@ function removeCuePoint(id) {
   // remove a cue point from embedded player
   player.removeCuePoint(id).then(function() {
     refreshCueList();
+    clearError();
   }).catch(function(error) {
+    setError('while deleting the cue');
     switch (error.name) {
       case 'UnsupportedError':
         console.warn('cue points are not supported with the current player or browser', error);
@@ -91,11 +100,11 @@ function clearCueList() {
   }
 }
 
-var noCues = document.getElementById('noCues');
 function refreshCueList() {
   // gets current video cues and displays them
   clearCueList();
   player.getCuePoints().then(function(cuePoints) {
+    clearError();
     if (cuePoints.length < 1) {
       noCues.style.display = 'block';
     } else {
@@ -112,6 +121,7 @@ function refreshCueList() {
     }
   }).catch(function(error) {
     console.warn('getCuePoints()', error);
+    setError('while refreshing the cue list');
   });
 }
 refreshCueList(); // do this immediately, just in case
@@ -122,6 +132,7 @@ refreshCueList(); // do this immediately, just in case
 document.getElementById('cueForm').addEventListener('submit', function(e) {
   e.preventDefault();
   player.getCurrentTime().then(function(seconds) {
+    clearError();
     var time = seconds;
     var text = document.getElementById('cueInput').value;
     if (text) { // do nothing if there is not text for the cue
@@ -130,8 +141,10 @@ document.getElementById('cueForm').addEventListener('submit', function(e) {
       player.addCuePoint(time, {
         text: text }
       ).then(function(id) {
-        refreshCueList()
+        refreshCueList();
+        clearError();
       }).catch(function(error) {
+        setError('while adding the cue');
         switch (error.name) {
           case 'UnsupportedError':
             console.warn('cue points are not supported with the current player or browser', error);
@@ -147,14 +160,13 @@ document.getElementById('cueForm').addEventListener('submit', function(e) {
     }
   }).catch(function(error) {
     console.warn('getCurrentTime()', error);
+    setError('while getting the current player time');
   });
 });
 
 
 /* CUE RENDERING */
 
-var cueDuration = 4 * 1000;
-var cueTimeout;
 player.on('cuepoint', function(cuePoint) {
   clearTimeout(cueTimeout); // clear existing hide timeout
   var cue = document.getElementById('cue'); // get cue
@@ -162,3 +174,14 @@ player.on('cuepoint', function(cuePoint) {
   cue.style.display = 'block'; // set cue to visible
   cueTimeout = setTimeout(function() { cue.style.display = 'none' }, cueDuration); // hide cue after delay
 });
+
+/* ERROR HANDLING */
+// this error handling isn't perfect, but at least it provides some feedback
+
+function setError(wrongText) {
+  error.style.display = 'inline-block';
+  error.innerHTML = 'Something went wrong ' + wrongText + '. Please try another operation or refresh the page.';
+}
+function clearError() {
+  error.style.display = 'none';
+}
