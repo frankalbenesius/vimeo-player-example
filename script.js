@@ -11,6 +11,35 @@ var noCues = document.getElementById('noCues');
 var cueDuration = 4 * 1000;
 var cueTimeout; // for cancelling timeouts later
 
+/* LOCALSTORAGE */
+function storageAvailable(type) {
+  try {
+    var storage = window[type],
+      x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  }
+  catch(e) {
+    return false;
+  }
+}
+
+// add cues to player if found locally
+if (storageAvailable('localStorage')) {
+  var storage = window.localStorage;
+  if (storage.cues) {
+    var cues = JSON.parse(storage.getItem('cues'));
+    var addCuePointPromises = cues.map(function(cue) {
+      return player.addCuePoint(cue.time, { text: cue.data.text });
+    });
+    Promise.all(addCuePointPromises).then(function() {
+      refreshCueList();
+    });
+  }
+}
+
+
 /* CUE LIST RENDERING */
 
 function padLeft(string, pad, length) {
@@ -100,11 +129,19 @@ function clearCueList() {
   }
 }
 
+function storeCuesLocally(cues) {
+  if (storageAvailable('localStorage')) {
+    var storage = window.localStorage;
+    storage.setItem('cues', JSON.stringify(cues));
+  }
+}
+
 function refreshCueList() {
   // gets current video cues and displays them
   clearCueList();
   player.getCuePoints().then(function(cuePoints) {
     clearError();
+    storeCuesLocally(cuePoints);
     if (cuePoints.length < 1) {
       noCues.style.display = 'block';
     } else {
@@ -124,7 +161,6 @@ function refreshCueList() {
     setError('while refreshing the cue list');
   });
 }
-refreshCueList(); // do this immediately, just in case
 
 
 /* CUE CREATION */
