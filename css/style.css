@@ -1,5 +1,5 @@
 body {
-  font-family: 'Open Sans', sans-serif;
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: GhostWhite;
 }
 
@@ -7,47 +7,114 @@ body {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  text-align: center;
+}
+
+header {
+  text-align: left;
+  margin: 20px 0;
+  position: relative;
+}
+
+header img {
+  width: 100%;
+  max-width: 200px;
+}
+
+header h1 {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-right: 10px;
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
 #player {
   position: relative;
 }
 
-#cue {
-  display: none;
-  color: #fff;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  line-height: 18px;
-  text-rendering: optimizeLegibility;
-  background-color: rgba(23, 35, 34, 0.5);
-  border-radius: 5px;
-  padding: .4em .5em;
-  margin: 10px;
-  top: 0;
-  left: 0;
-  position: absolute;
-  -webkit-font-smoothing: antialiased;
+#cueForm, #cueList {
+  margin: 20px;
+  text-align: center;
+}
+#cueForm:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
-#cueList {
-  text-align: left;
-  max-width: 400px;
-  width: 100%;
-  margin: 0 auto;
+#cueInput {
+  box-sizing: border-box;
+  width: 80%;
+  margin: 0 10px 0 0;
+  padding: 8px;
+  display: block;
+  min-height: 55px;
+  float: left;
+  resize: none;
+  font-size: 1rem;
+}
+
+#cueSubmit {
+  box-sizing: border-box;
+  width: 18%;
+  display: block;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  height: 55px;
+  background-color: #00adef;
+  float: right;
+  padding: 0;
+}
+
+#cueList h2 {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 }
 
 .cueListItem {
   display: block;
-  margin: 10px 0;
+  margin-bottom: 10px;
 }
 
-.cueListItemTime {
+.cueListItemTime, .cueListItemDelete {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 12px;
+  margin: 3px;
 }
-.cueListItemDelete {
+.cueListItemTime:hover, .cueListItemDelete:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
-.cueListItemText {
+
+.cueListItemText, #cue {
+  display: inline-block;
+  color: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 18px;
+  text-rendering: optimizeLegibility;
+  background-color: rgba(23, 35, 34, .75);
+  border-radius: 5px;
+  padding: .4em .5em;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  max-width: 500px;
+  text-align: left;
+}
+
+#cue {
+  display: none;
+  top: 10px;
+  left: 10px;
+  position: absolute;
 }
 
 /* blue: #00adef */

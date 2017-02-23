@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <title>Vimeo Cue Creator</title>
   <script src="https://player.vimeo.com/api/player.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
   <!--[if IE]>
@@ -15,19 +14,26 @@
 <body>
 <div id="wrapper">
 
-  <h1>Cue Creator</h1>
+  <header>
+    <img src="img/vimeo_logo_blue.png" />
+    <h1>Cue Creator</h1>
+  </header>
 
   <div id="player">
-    <div id="cue">Test</div>
+    <div id="cue"></div>
   </div>
 
   <form id="cueForm">
-    <input id="cueInput" type="text" />
-    <input id="cueSubmit" type="submit" value="Add Cue" />
+    <textarea id="cueInput" type="text" maxlength="100" autofocus></textarea><!--
+ --><input id="cueSubmit" type="submit" value="Add Cue" />
   </form>
 
   <div id="cueList">
-    <h2>Your Cues:</h2>
+    <h2>Your Cues</h2>
+    <p id="noCues">
+      Add a cue using the input box above!<br />
+      Cues will be added at the current video player time.
+    </p>
   </div>
 
   <script src="script.js"></script>
