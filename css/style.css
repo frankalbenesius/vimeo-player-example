@@ -118,6 +118,10 @@ header h1 {
   text-align: left;
 }
 
+#noCues {
+  line-height: 1.2em;
+}
+
 #cue {
   display: none;
   top: 10px;
