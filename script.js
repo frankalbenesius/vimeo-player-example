@@ -11,7 +11,9 @@ var noCues = document.getElementById('noCues');
 var cueDuration = 4 * 1000;
 var cueTimeout; // for cancelling timeouts later
 
+
 /* LOCALSTORAGE */
+
 function storageAvailable(type) {
   try {
     var storage = window[type],
@@ -22,6 +24,13 @@ function storageAvailable(type) {
   }
   catch(e) {
     return false;
+  }
+}
+
+function storeCuesLocally(cues) {
+  if (storageAvailable('localStorage')) {
+    var storage = window.localStorage;
+    storage.setItem('cues', JSON.stringify(cues));
   }
 }
 
@@ -126,13 +135,6 @@ function clearCueList() {
   var currentItems = document.getElementsByClassName('cueListItem');
   while(currentItems[0]) { // remove current list items (items are removed in live list)
     currentItems[0].parentNode.removeChild(currentItems[0]);
-  }
-}
-
-function storeCuesLocally(cues) {
-  if (storageAvailable('localStorage')) {
-    var storage = window.localStorage;
-    storage.setItem('cues', JSON.stringify(cues));
   }
 }
 
